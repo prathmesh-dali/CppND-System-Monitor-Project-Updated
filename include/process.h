@@ -13,6 +13,7 @@ class Process {
   std::string User();
   std::string Command();
   float CpuUtilization() const;
+  void CpuUtilization(long processJiffes, long totalJiffes);
   std::string Ram();
   long int UpTime();
   bool operator<(Process const& a) const;
@@ -24,6 +25,8 @@ class Process {
   float cpuUtilization_;
   std::string ram_;
   long int uptime_;
+  long previousProcessJiffes_{0};
+  long previousTotalJiffes_{0};
 };
 
 #endif

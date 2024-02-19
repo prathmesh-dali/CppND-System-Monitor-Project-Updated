@@ -117,7 +117,7 @@ long LinuxParser::ActiveJiffies(int pid) {
       }
     }
   }
-  return totaltime / sysconf(_SC_CLK_TCK);
+  return totaltime;
 }
 
 long LinuxParser::ActiveJiffies() {
@@ -187,12 +187,10 @@ int LinuxParser::RunningProcesses() {
 }
 
 string LinuxParser::Command(int pid) {
-  string line, cmd;
+  string cmd;
   std::ifstream stream(kProcDirectory + std::to_string(pid) + kCmdlineFilename);
   if (stream.is_open()) {
-    std::getline(stream, line);
-    std::istringstream linestream(line);
-    linestream >> cmd;
+    std::getline(stream, cmd);
   }
   return cmd;
 }
@@ -253,15 +251,24 @@ string LinuxParser::User(int pid) {
 }
 
 long LinuxParser::UpTime(int pid) {
-  std::string line, uptime;
+  std::string line, value;
+  long uptime{0};
+  vector<string> values;
   std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
-    const int upTimePosition = 22;
-    for (int i = 0; i < upTimePosition; ++i) {
-      linestream >> uptime;
+    while (linestream >> value) {
+      values.push_back(value);
     }
   }
-  return stol(uptime) / sysconf(_SC_CLK_TCK);
+  const int upTimePosition = 21;
+  if (values.size() > upTimePosition) {
+    try {
+      uptime = UpTime() - (stol(values[upTimePosition]) / sysconf(_SC_CLK_TCK));
+    } catch (...) {
+      uptime = 0;
+    }
+  }
+  return uptime;
 }
