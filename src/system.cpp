@@ -19,10 +19,20 @@ using std::vector;
 Processor& System::Cpu() { return cpu_; }
 
 vector<Process>& System::Processes() {
-  processes_.clear();
+  // processes_.clear();
   vector<int> pids = LinuxParser::Pids();
+
+  set<int> existing_processe;
+  for(auto& process: processes_){
+    existing_processe.emplace(process.Pid());
+  }
   for (int pid : pids) {
-    processes_.emplace_back(Process(pid));
+    if(existing_processe.find(pid) == existing_processe.end()){
+      processes_.emplace_back(Process(pid));
+    }
+  }
+  for(Process& process : processes_){
+    process.CpuUtilization(LinuxParser::ActiveJiffies(process.Pid()), LinuxParser::Jiffies());
   }
   std::sort(processes_.rbegin(), processes_.rend());
   return processes_;
