@@ -15,8 +15,8 @@ using std::vector;
 
 Process::Process(int pid)
     : pid_(pid),
-      command_(LinuxParser::Command(pid)),
       user_(LinuxParser::User(pid)),
+      command_(LinuxParser::Command(pid)),
       uptime_(LinuxParser::UpTime(pid)) {}
 
 int Process::Pid() const { return pid_; }
