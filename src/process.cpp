@@ -31,7 +31,13 @@ void Process::CpuUtilization(long processJiffes, long totalJiffes) {
   cpuUtilization_ = float(deltaProcessJiffes) / float(deltaTotalJiffes);
 }
 
-string Process::Command() { return command_; }
+string Process::Command() { 
+  int unsigned width = 50;
+  if(command_.size()>width){
+    command_.resize(width);
+    command_ = command_.append("...");
+  }
+  return command_; }
 
 string Process::Ram() { return LinuxParser::Ram(Pid()); }
 

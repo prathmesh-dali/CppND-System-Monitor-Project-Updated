@@ -1,6 +1,7 @@
 #include "format.h"
 
 #include <iomanip>
+#include <chrono>
 #include <string>
 
 using std::string;
@@ -9,9 +10,17 @@ using std::string;
 // OUTPUT: HH:MM:SS
 string Format::ElapsedTime(long seconds) {
   int hours, minutes;
-  hours = seconds / (60 * 60);
-  minutes = (seconds / 60) % 60;
-  seconds = seconds % 60;
+  // hours = seconds / (60 * 60);
+  // minutes = (seconds / 60) % 60;
+  // seconds = seconds % 60;
+  std::chrono::seconds secs{seconds};
+  auto hrs = std::chrono::duration_cast<std::chrono::hours>(secs);
+  secs -= std::chrono::duration_cast<std::chrono::seconds>(hrs);
+  auto mins = std::chrono::duration_cast<std::chrono::minutes>(secs);
+  secs -= std::chrono::duration_cast<std::chrono::seconds>(mins);
+  seconds = (std::chrono::duration_cast<std::chrono::seconds>(secs)).count();
+  hours = hrs.count();
+  minutes = mins.count();
 
   std::stringstream result;
 
