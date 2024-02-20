@@ -23,7 +23,7 @@ const std::string kTotalMemory{"MemTotal:"};
 const std::string kFreeMemory{"MemFree:"};
 const std::string kTotalProcesses{"processes"};
 const std::string kRunningProcesses{"procs_running"};
-const std::string kProcessMemory{"VmRSS:"}; //The string can be VmSize as well
+const std::string kProcessMemory{"VmRSS:"};  // The string can be VmSize as well
 const std::string kUid{"Uid:"};
 
 // System

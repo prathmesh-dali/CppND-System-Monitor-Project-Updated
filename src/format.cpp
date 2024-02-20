@@ -1,7 +1,7 @@
 #include "format.h"
 
-#include <iomanip>
 #include <chrono>
+#include <iomanip>
 #include <string>
 
 using std::string;
